@@ -121,23 +121,3 @@ def add_messages(email='study.ai_172@mail.ru', password='NextPassword172',
 
 add_messages()
 
-# print(all_mails)
-# driver.quit()
-
-
-# print(len(all_mails))
-
-# time.sleep(3)
-# back=driver.find_element_by_xpath('//span[contains(@class,"button2") and @title="Вернуться"]')
-# back.click()
-# driver.send_keys(Keys.PAGE_DOWN)
-# for link in set(link_lst):
-# driver.get(link)
-# if len(set(link_list))<50:
-#     driver.get(link_list[-1])
-#     time.sleep(2)
-#     back = driver.find_element_by_xpath(
-#          '//span[contains(@class,"button2") and @title="Вернуться"]')
-#     back.click()
-#     #links[-1].send_keys(Keys.PAGE_DOWN)
-#     link_list=list(set(link_list))
