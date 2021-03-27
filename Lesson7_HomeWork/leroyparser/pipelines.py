@@ -35,7 +35,7 @@ class LeroyPhotosPipeline(ImagesPipeline):
         return f'{cat_name}/{dir_name}/full/{file_name}'
 
     # переопределим путь к сжатым файлам (images/запрос/<артикул>/<тепень сжатия>/file_name.jpg)
-    # (к сожалению не смог заставить срабатывать на запросах по нескольким товарам(стр. 40 как заглушка...))
+    # (к сожалению не смог заставить срабатывать на запросах по нескольким товарам(стр. 41 как заглушка...))
     def thumb_path(self, request, thumb_id, response=None, info=None):
         file_name = request.url.split('/')[-1]
         cat_name = info.spider.start_urls[0].split('=')[-1]
