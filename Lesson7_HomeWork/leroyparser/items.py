@@ -8,6 +8,7 @@ from itemloaders.processors import MapCompose, TakeFirst, Compose
 import urllib
 
 
+# вытаскиваем требуемую информацию о товаре(пусть будет название, ценв, артикул)
 def get_general(dictionary):
     dictionary = dictionary[0]
     general = {'name': dictionary['data-product-name'],
@@ -16,7 +17,7 @@ def get_general(dictionary):
                }
     return general
 
-
+# из списка характеристик формируем словарь
 def get_charakteristics(selector):
     characteristic = {}
     for key, value in zip(selector[::2], selector[1::2]):
@@ -30,7 +31,7 @@ def get_charakteristics(selector):
         print()
     return characteristic
 
-
+# из главной ссылки извлекаем предмет запроса, преобразовываем в кириллическое написание...
 def get_main(link):
     link = link[0].decode('utf-8')
     if '&' in link:
