@@ -29,16 +29,16 @@ class LeroyPhotosPipeline(ImagesPipeline):
 
     # переопределим путь к изображениям (images/запрос/<артикул>/full/file_name.jpg)
     def file_path(self, request, response=None, info=None, *, item=None):
+        # определим глобальную переменную, для использования в  def thumb_path, так как он не имеет доступа к item   
+        global cat_name
         cat_name = item['main']
         dir_name = str(item['general']['article'])
         file_name = request.url.split('/')[-1]
         return f'{cat_name}/{dir_name}/full/{file_name}'
 
     # переопределим путь к сжатым файлам (images/запрос/<артикул>/<тепень сжатия>/file_name.jpg)
-    # (к сожалению не смог заставить срабатывать на запросах по нескольким товарам(стр. 41 как заглушка...))
-    def thumb_path(self, request, thumb_id, response=None, info=None):
+        def thumb_path(self, request, thumb_id, response=None, info=None):
         file_name = request.url.split('/')[-1]
-        cat_name = info.spider.start_urls[0].split('=')[-1]
         dir_name = file_name.replace('.jpg', '').split('_')[0]
         return f'{cat_name}/{dir_name}/{thumb_id}/small_{file_name}'
 
@@ -46,11 +46,10 @@ class LeroyPhotosPipeline(ImagesPipeline):
 
         for result in [x for ok, x in results if ok]:
             path = result['path']
-            # pre=path.split('/')[0]
             slug = path.split('/')[0]
 
             settings = get_project_settings()
-            storage = settings.get('IMAGES_STORE')  # +f'/{item["main"]}'
+            storage = settings.get('IMAGES_STORE')
 
             # если пути к папке не существует-создадим её
             if not os.path.exists(os.path.join(storage, slug)):
@@ -70,7 +69,6 @@ class LeroyparserPipeline:
     def process_item(self, item, spider):
         item['article'], item['name'], item['price'] = self.process_general(
             item['general'])
-        collection_name = self.process_collections(spider.start_urls)
         collection = self.mongo_base[item['main']]
         del item['general']
         del item['main']
@@ -80,13 +78,7 @@ class LeroyparserPipeline:
             collection.insert_one(item)
         except pymongo.errors.DuplicateKeyError:
             duplicate += 1
-
-        print()
         return item
 
     def process_general(self, general):
         return general['article'], general['name'], general['price']
-
-    def process_collections(self, urls):
-        name = urls[0].split('=')[-1]
-        return name
